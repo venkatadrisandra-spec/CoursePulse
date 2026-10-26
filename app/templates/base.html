@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}CoursePulse{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body><header class="site-header"><div class="container nav"><a class="brand" href="{{ url_for('main.index') }}">CoursePulse</a>
+<nav><a href="{{ url_for('main.index') }}">Feedback</a><a href="{{ url_for('main.reports') }}">Reports</a></nav></div></header>
+<main class="container">{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="messages">
+{% for category, message in messages %}<p class="message {{ category }}">{{ message }}</p>{% endfor %}</div>{% endif %}{% endwith %}
+{% block content %}{% endblock %}</main><footer class="container footer">CoursePulse · Anonymous feedback · Aggregated reporting only</footer></body></html>

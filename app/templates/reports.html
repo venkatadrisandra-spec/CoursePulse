@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Reports · CoursePulse{% endblock %}{% block content %}
+<section class="hero"><p class="eyebrow">AGGREGATED INSIGHTS</p><h1>Course feedback report</h1><p class="lead">Only group-level ratings are shown. Individual comments are not displayed.</p></section>
+<div class="metrics"><article class="metric"><span>Total recorded ratings</span><strong>{{ summary.total_responses }}</strong></article>
+<article class="metric"><span>Minimum group size</span><strong>{{ summary.minimum_responses }}</strong></article>
+<article class="metric"><span>Reportable courses</span><strong>{{ summary.course_summaries|length }}</strong></article></div>
+{% if summary.notice %}<p class="notice">{{ summary.notice }}</p>{% endif %}
+<section class="panel"><div class="section-heading"><div><h2>Average rating by course</h2><p class="muted">Scale: 1 to 5. Small groups are suppressed.</p></div>
+<a class="button-link" href="{{ url_for('main.export_csv') }}">Export aggregated CSV</a></div>
+<img class="chart" src="{{ url_for('main.chart', kind='courses') }}" alt="Average rating by course bar chart">
+<div class="table-wrap"><table><thead><tr><th>Course</th><th>Average rating</th><th>Ratings counted</th></tr></thead><tbody>
+{% for x in summary.course_summaries %}<tr><td>{{ x.course_name }}</td><td>{{ "%.2f"|format(x.average_rating) }} / 5</td><td>{{ x.response_count }}</td></tr>
+{% else %}<tr><td colspan="3">No reportable course data yet.</td></tr>{% endfor %}</tbody></table></div></section>
+<section class="panel"><h2>Rating distribution</h2><p class="muted">Counts of ratings 1–5 for reportable courses.</p>
+<img class="chart" src="{{ url_for('main.chart', kind='distribution') }}" alt="Rating distribution chart"></section>
+<section class="panel"><h2>Average rating by question</h2><div class="table-wrap"><table><thead><tr><th>Course</th><th>Question</th><th>Average rating</th><th>Ratings counted</th></tr></thead><tbody>
+{% for x in summary.question_summaries %}<tr><td>{{ x.course_name }}</td><td>{{ x.question_text }}</td><td>{{ "%.2f"|format(x.average_rating) }} / 5</td><td>{{ x.response_count }}</td></tr>
+{% else %}<tr><td colspan="4">No reportable question data yet.</td></tr>{% endfor %}</tbody></table></div></section>{% endblock %}
